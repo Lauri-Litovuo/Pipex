@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:42:16 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/01/30 17:09:04 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:09:59 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
+# include <sys/wait.h>
+# include <string.h>
+# include <stdio.h>
 
 
 #endif
