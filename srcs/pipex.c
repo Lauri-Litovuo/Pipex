@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/01/31 14:59:24 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/01 14:05:22 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,8 @@ void	create_childs(int ac)
 			exit (1);
 		}
 		close(fd[0]);
+		wait()
 	}
-
-	
-	
 }
 
 check_for_errors(int ac, char **av)
@@ -131,3 +129,40 @@ check_for_errors(int ac, char **av)
 	
 	// fd_f1 = open (av[1], O_RDONLY);
 	// fd_f2 = open (av[4], O_WRONLY);
+
+
+/* This snippet kind of dups the file_fd of stdout so I can write to file
+
+	int file;
+	int fd_writeto;
+	int err;
+
+	if (pid == 0)
+	{
+		file = open ("outputfile.txt", O_WRONLY);
+		if (file == - 1)
+		{
+			perror("smth");
+			exit(1);
+		}
+	}
+	file = dup2(file, 1 || STDOUT_FILENO);
+	close (file);
+
+	*here the code that calls ls etc. e.g.:
+	if (pid == 0)
+	{
+		err (execve(vector, env))
+		if (err == -1)
+		{
+			perror("smth");
+			exit (1);
+		}
+	}
+	else
+	{
+		smth
+	}
+		
+	}*/
+	
