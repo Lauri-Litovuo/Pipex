@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/05 18:27:49 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/06 14:50:02 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,260 +25,130 @@
  * @return int 
  */
 
-int	main(int ac, char **av)
-{
-	int			cmd_count;
-	int			i;
-	extern char	**environ;
-	char		*path;
+static void	pipex(int fd_in, int fd_out, char **av, char **paths);
+static void	child1_proc(int *fd, char **paths, char *cmd1);
+static void	child2_proc(int *fd, char **paths, char *cmd2);
+static void	free_array(char **arr);
 
-	i = 0;
-	cmd_count = ac - 2 - 1;
-	get_path = environ;
-	// if (ft_strncmp(av[1], "here_doc", 9);
-	// 	i = ac - 1 - 1;
+int	main(int ac, char **av, char **envp)
+{
+	int			fd_in;
+	int			fd_out;
+	char		**paths;
+
 	if (ac != 5) //change this to bonus < 5
 	{
 		write (2, "Too few arguments.\n", 19);
 		return (-1);
 	}
-	the_pipe(cmd_count, av, NULL);
+	check_permissions(av); //check what shell does when ofile does not exist then move this if it creates
+	fd_in = open(av[1], O_RDONLY);
+	fd_out = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0755);
+	if (fd_in == -1 || fd_out == -1)
+		error_handling(7, NULL);
+	paths = parse_path(envp);
+	pipex(fd_in, fd_out, av, paths);
+	free_array(paths);
+	return (0);
 }
 
-//Function functions similar to pipe operator
-void the_pipe(int ac, char *cmd, char **envp)
+static void	pipex(int fd_in, int fd_out, char **av, char **paths)
 {
-	int	fd[2];
-	int	pid1;
-	int	pid2;
-	int	err;
+	int		fd[2];
+	int		pid1;
+	int		pid2;
 
 	if (pipe(fd) == -1)
-		error_handling(2);
+		error_handling(2, paths);
 	pid1 = fork();
 	if (pid1 == -1)
-		error_handling(3);
+		error_handling(3, paths);
 	if (pid1 == 0)
-	{ //first child process
-		dup2(fd[1], STDOUT_FILENO);
-		close (fd[0]);
-		close (fd[1]);
-		err = (execve("the path", cmd, envp));
-		if (err == -1)
-			error_handling(4);
-	}
+		child1_proc(fd, paths, av[2]);
 	pid2 = fork();
 	if (pid2 == -1)
-		error_handling(2);
+		error_handling(2, paths);
 	if (pid2 == 0)
-	{ //second child process
-		dup2(fd[0], STDIN_FILENO);
-		close (fd[0]);
-		close (fd[1]);
-		err = (execve("the path", cmd, envp));
-		if (err == -1)
-			error_handling(4);
-	}
+		child2_proc(fd, paths, av[3]);
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(pid1, NULL, 0);
+	waitpid(pid1, NULL, 0); //check if waitpid error is needed
 	waitpid(pid2, NULL, 0);
 	return ;
 }
 
-//This works and parses
-
-
-/*
-
-char	*get_path(char **env)
+static void	child1_proc(int *fd, char **paths, char *cmd1)
 {
 	int		i;
 	char	*full_path;
-
+	char	**cmds;
+	
 	i = 0;
-	while (paths[i] != 0)
+	cmds = ft_split(cmd1, ' ');
+	dup2(fd[1], STDOUT_FILENO);
+	close (fd[0]);
+	close (fd[1]);
+	// if (write(fd[1], &result, sizeof(result)) == -1)
+	// {
+	// 	perror("Writing to pipe failed: ")
+	// 	exit (1);
+	// }
+	while (paths != 0)
 	{
-		full_path = ft_strjoin("/", cmd);
-		full_path = ft_strjoin(paths[i], cmd);
-		if (access(full_path, F_OK) == 0)
-			return (paths[i]);
+		full_path = join_str(paths[i], cmds[1]);
+		if (!full_path)
+		{
+			free_array(cmds);
+			error_handling(8, paths);
+		}
+		if (execve(full_path, cmds, paths) == -1)
+			errors_in_child(paths, cmds);
 		free(full_path);
 		i++;
 	}
-	return (NULL);
+	errors_in_child(paths, cmds);
 }
 
-int	pipe_fork(int cmd_count, char **av, char **paths)
+static void	child2_proc(int *fd, char **paths, char *cmd2)
 {
-	int	pids[cmd_count];
-	int	pipes[cmd_count + 1][2];
-	int	i;
-	int	j;
+	int		i;
+	char	*full_path;
+	char	**cmds;
 
 	i = 0;
-	j = 0;
-	while (i < cmd_count + 1)
+	cmds = ft_split(cmd2, ' ');
+	dup2(fd[0], STDIN_FILENO);
+	close (fd[0]);
+	close (fd[1]);
+	// if(read(fd[0],  &output_from_child, sizeof(output_from_child)) == -1);
+	// {
+	// 	perror("Writing to pipe failed: ")
+	// 	exit (1);
+	// }
+	while (paths != 0)
 	{
-		if (pipe(pipes[i]) == -1)
+		full_path = join_str(paths[i], cmds[1]);
+		if (!full_path)
 		{
-			perror ("Piping failed: ");
-			exit (1);
+			free_array(cmds);
+			error_handling(8, paths);
 		}
+		if (execve(full_path, cmds, paths) == -1)
+			errors_in_child(paths, cmds);
+		free (full_path);
 		i++;
 	}
-	i = 0;
-	while (i < cmd_count)
-	{
-		pids[i] = fork();
-		if (pids[i] == - 1)
-		{
-			perror ("Fork failed: ");
-			exit (1);
-		}
-		if (pids[i] == 0)
-		{
-			if (pids[i] == 0)
-			{
-				if (i != j)
-					close (pipes[j][0]);
-				if (i + 1 != j)
-					close (pipes[j][1]);
-			}
-		}
-	}
-}*/
-
-/*
-int	main(int ac, char **av)
-{
-	int		*pids;
-	int		cmd_count;
-	pid_t	wait_status;
-	int		status;
-	int		i;
-
-	i = 0;
-	cmd_count = ac - 2 - 1;
-	check_for_errors(ac, av);
-	// if (ft_strncmp(av[1], "here_doc", 9);
-	// 	i = ac - 1 - 2
-	if (pid == -1)
-	{
-		perror("Fork failed: ");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0) //child process to exevute
-	{
-		exec_child(av[1], av[2]);
-		
-	}
-	else //the parent process
-	{
-		wait_status = waitpid(pid, &status, );
-		if (wait_status == -1)
-		{
-			perror("Waitpid failed: ");
-			exit (EXIT_FAILURE);	
-		}
-		pipe_child_outcome();
-	}
-	cmd_count = ac - 1 - 2;
-	while (i < cmd_count)
-		create_childs;
-
 }
 
-
-void	create_childs(int ac)
+static void	free_array(char **arr)
 {
-	pid_t	pid;
-	int		fd[2]; // fd[1], write ====== fd[0], read
-	
-	if (pipe(fd) == -1)
+	int	i;
+
+	i = 0;
+	while (arr[i])
 	{
-		perror("Error in opening pipe: ");
-		exit (1);
+		free (arr[i]);
+		i++;
 	}
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("Fork failed: ");
-		exit (1);
-	}
-	if (pid == 0) //child
-	{
-		char *result;
-		close(fd[0]);
-		if (write(fd[1], &result, sizeof(result)) == -1)
-		{
-			perror("Writing to pipe failed: ")
-			exit (1);
-		}
-		
-		close (fd[1]);
-	}
-	else //parent
-	{
-		char *output_from_child;
-		close(fd[1]);
-		if(read(fd[0],  &output_from_child, sizeof(output_from_child)) == -1);
-		{
-			perror("Writing to pipe failed: ")
-			exit (1);
-		}
-		close(fd[0]);
-		wait()
-	}
+	free (arr);
 }
-
-
-
-	// int		fd_f1;
-	// int		fd_f2;
-	
-	// fd_f1 = open (av[1], O_RDONLY);
-	// fd_f2 = open (av[4], O_WRONLY);
-
-
-/* This snippet kind of dups the file_fd of stdout so I can write to file
-
-	int file;
-	int fd_writeto;
-	int err;
-
-	if (pid == 0)
-	{
-		file = open ("outputfile.txt", O_WRONLY);
-		if (file == - 1)
-		{
-			perror("smth");
-			exit(1);
-		}
-	}
-	file = dup2(file, 1 || STDOUT_FILENO);
-	close (file);
-
-	*here the code that calls ls etc. e.g.:
-	if (pid == 0)
-	{
-		err (execve(vector, env))
-		if (err == -1)
-		{
-			perror("smth");
-			exit (1);
-		}
-	}
-	else
-	{
-		smth
-	}
-		
-	}*/
-/*
-		if (access (av[1], F_OK) && access(av[4], F_OK))
-		perror ("File not found: ");
-	else if (access(av[1], R_OK) == -1)
-		perror ("Error in file: ");
-	else if (access(av[4], W_OK) == -1)
-		perror ("Error in file: ");
