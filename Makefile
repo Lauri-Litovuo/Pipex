@@ -6,16 +6,23 @@ S = srcs/
 O = objs/
 I = incl/
 L = libft/
+B = bonus/
 
 all: $(NAME)
 
-.PHONY: all clean fclean re
+libft: $(LIBFT)
+
+.PHONY: all clean fclean re bonus
 
 CC = cc
 CFLAGS += -Wall -Wextra -Werror -I$I
 LDFLAGS += 
 
-SRC = $Spipex.c \
+SRC = \
+		$Spipex.c \
+		$Spipex_utils.c \
+		$Serror_handling.c\
+
 
 
 OBJ = $(SRC:$S%=$O%.o)
