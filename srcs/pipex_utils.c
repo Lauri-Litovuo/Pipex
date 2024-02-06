@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:28:11 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/05 18:28:28 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/06 14:19:11 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,52 @@ char	**parse_path(char **envp)
 	}
 	paths = ft_split(path_line, ':');
 	if (paths == NULL)
-	{
-		perror("Error in splitting envp: ");
-		exit (1);
-	}
+		error_handling(6, paths);
 	return (paths);
 }
 
-void	error_handling(int errcode)
+char	**parse_cmd(char **av)
 {
-	if (errcode == 2)
-		perror ("Piping failed: ");
-	if (errcode == 3)
-		perror ("Fork pid1 failed: ");
-	if (errcode == 4)
-		perror ("Execve failed: ");
-	if (errcode == 5)
-		perror ("Fork pid2 failed: ");
-	exit (1);
+	char	**cmds;
+
+	cmds = ft_split(av[1], " ");
+	if (cmds == NULL)
+		error_handling(6, NULL);
+	return (cmds);
+}
+
+char	*find_path(char **paths, char *cmd)
+{
+	int		i;
+	char	*full_path;
+
+	i = 0;
+	while (paths[i] != 0)
+	{
+		full_path = ft_strjoin("/", cmd);
+		full_path = ft_strjoin(paths[i], cmd);
+		if (access(full_path, F_OK) == 0)
+			return (paths[i]);
+		free(full_path);
+		i++;
+	}
+	return (NULL);
+}
+
+char	*join_str(char *path, char *cmd)
+{
+	char	*joint;
+	int		len;
+
+	if (!path || !cmd)
+		return (NULL);
+	len = ft_strlen((char *)path);
+	len += ft_strlen((char *)cmd);
+	joint = (char *) malloc(len * sizeof(char) + 2);
+	if (!(joint))
+		return (NULL);
+	ft_strlcpy(joint, path, len + 2);
+	ft_strlcat(joint, "/", len + 2);
+	ft_strlcat(joint, cmd, len + 2);
+	return (joint);
 }
