@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:42:16 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/07 16:14:50 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/07 17:40:55 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ char	*join_str(char *path, char *cmd);
 void	error_handling(int errcode, char **paths);
 void	check_permissions(char **av);
 void	errors_in_child(char **paths, char **cmds);
+void	free_struct(t_pipex *cont);
 
 #endif
