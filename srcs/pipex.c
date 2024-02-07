@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/06 14:50:02 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/07 12:55:30 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	check_permissions(av); //check what shell does when ofile does not exist then move this if it creates
 	fd_in = open(av[1], O_RDONLY);
-	fd_out = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0755);
+	fd_out = open(av[4], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (fd_in == -1 || fd_out == -1)
 		error_handling(7, NULL);
 	paths = parse_path(envp);
@@ -70,8 +70,10 @@ static void	pipex(int fd_in, int fd_out, char **av, char **paths)
 		error_handling(2, paths);
 	if (pid2 == 0)
 		child2_proc(fd, paths, av[3]);
-	close(fd[0]);
-	close(fd[1]);
+	if (close(fd[0]) == -1)
+		handle_pipex_error(smth); //here somethign that I will pass
+	if (close(fd[1]) == -1)
+		handle_pipex_error(smth); //same here; struct?
 	waitpid(pid1, NULL, 0); //check if waitpid error is needed
 	waitpid(pid2, NULL, 0);
 	return ;
@@ -86,8 +88,10 @@ static void	child1_proc(int *fd, char **paths, char *cmd1)
 	i = 0;
 	cmds = ft_split(cmd1, ' ');
 	dup2(fd[1], STDOUT_FILENO);
-	close (fd[0]);
-	close (fd[1]);
+	if (close(fd[0]) == -1)
+		handle_pipex_error(smth); //here somethign that I will pass
+	if (close(fd[1]) == -1)
+		handle_pipex_error(smth); //same here; struct?
 	// if (write(fd[1], &result, sizeof(result)) == -1)
 	// {
 	// 	perror("Writing to pipe failed: ")
@@ -118,8 +122,10 @@ static void	child2_proc(int *fd, char **paths, char *cmd2)
 	i = 0;
 	cmds = ft_split(cmd2, ' ');
 	dup2(fd[0], STDIN_FILENO);
-	close (fd[0]);
-	close (fd[1]);
+	if (close(fd[0]) == -1)
+		handle_pipex_error(smth); //here somethign that I will pass
+	if (close(fd[1]) == -1)
+		handle_pipex_error(smth); //same here; struct?
 	// if(read(fd[0],  &output_from_child, sizeof(output_from_child)) == -1);
 	// {
 	// 	perror("Writing to pipe failed: ")
