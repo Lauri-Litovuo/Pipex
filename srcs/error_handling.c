@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:15:04 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/06 14:24:51 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/07 16:50:03 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,3 +59,23 @@ void	errors_in_child(char **paths, char **cmds)
 	
 }
 
+void	free_cmds(char ***cmds)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (cmds[i] != NULL)
+	{
+		while (cmds[i][j] != NULL)
+		{
+			free(cmds[i][j]);
+			j++;
+		}
+		free(cmds[i]);
+		i++;
+		j = 0;
+	}
+	free(cmds);
+}
