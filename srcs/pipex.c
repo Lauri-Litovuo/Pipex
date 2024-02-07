@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/07 12:55:30 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/07 18:10:58 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,51 +25,63 @@
  * @return int 
  */
 
-static void	pipex(int fd_in, int fd_out, char **av, char **paths);
+static void	pipex(t_pipex *cont);
 static void	child1_proc(int *fd, char **paths, char *cmd1);
 static void	child2_proc(int *fd, char **paths, char *cmd2);
-static void	free_array(char **arr);
 
 int	main(int ac, char **av, char **envp)
 {
-	int			fd_in;
-	int			fd_out;
-	char		**paths;
+	t_pipex		*cont;
 
 	if (ac != 5) //change this to bonus < 5
 	{
 		write (2, "Too few arguments.\n", 19);
 		return (-1);
 	}
+	cont = (t_pipex *) malloc (sizeof(cont));
+	if (!cont)
+		exit(1);
+	init_cont(cont);
 	check_permissions(av); //check what shell does when ofile does not exist then move this if it creates
-	fd_in = open(av[1], O_RDONLY);
-	fd_out = open(av[4], O_RDWR | O_TRUNC | O_CREAT, 0644);
-	if (fd_in == -1 || fd_out == -1)
+	cont->fd_in = open(av[1], O_RDONLY);
+	cont->fd_out = open(av[4], O_RDWR | O_TRUNC | O_CREAT, 0644);
+	if (cont->fd_in == -1 || cont->fd_out == -1)
 		error_handling(7, NULL);
-	paths = parse_path(envp);
-	pipex(fd_in, fd_out, av, paths);
-	free_array(paths);
+	cont->paths = parse_path(envp);
+	cont->cmds = get_cmds(av, cont->cmd_count);
+	pipex(cont);
+	free_struct(&cont);
 	return (0);
 }
 
-static void	pipex(int fd_in, int fd_out, char **av, char **paths)
+void	init_cont(t_pipex *cont)
+{
+	cont->fd_in = -1;
+	cont->fd_out = -1;
+	cont->paths = NULL;
+	cont->cmds = NULL;
+	cont->cmd_count = 0;
+	cont->here_doc = 0; // for bonus
+}
+
+static void	pipex(t_pipex *cont)
 {
 	int		fd[2];
 	int		pid1;
 	int		pid2;
 
 	if (pipe(fd) == -1)
-		error_handling(2, paths);
+		error_handling(2, cont.paths);
 	pid1 = fork();
 	if (pid1 == -1)
-		error_handling(3, paths);
+		error_handling(3, cont.paths);
 	if (pid1 == 0)
-		child1_proc(fd, paths, av[2]);
+		child1_proc(fd, cont.paths, av[2]);
 	pid2 = fork();
 	if (pid2 == -1)
-		error_handling(2, paths);
+		error_handling(2, cont.paths);
 	if (pid2 == 0)
-		child2_proc(fd, paths, av[3]);
+		child2_proc(fd, cont.paths, av[3]);
 	if (close(fd[0]) == -1)
 		handle_pipex_error(smth); //here somethign that I will pass
 	if (close(fd[1]) == -1)
@@ -117,10 +129,10 @@ static void	child2_proc(int *fd, char **paths, char *cmd2)
 {
 	int		i;
 	char	*full_path;
-	char	**cmds;
+	char	**cmd_flags;
 
 	i = 0;
-	cmds = ft_split(cmd2, ' ');
+	cmd_flags = ft_split(cmd2, ' ');
 	dup2(fd[0], STDIN_FILENO);
 	if (close(fd[0]) == -1)
 		handle_pipex_error(smth); //here somethign that I will pass
@@ -146,15 +158,4 @@ static void	child2_proc(int *fd, char **paths, char *cmd2)
 	}
 }
 
-static void	free_array(char **arr)
-{
-	int	i;
 
-	i = 0;
-	while (arr[i])
-	{
-		free (arr[i]);
-		i++;
-	}
-	free (arr);
-}
