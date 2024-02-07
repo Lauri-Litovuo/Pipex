@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:15:04 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/07 16:50:03 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/07 17:41:03 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,33 @@ void	free_cmds(char ***cmds)
 		j = 0;
 	}
 	free(cmds);
+}
+
+void	free_struct(t_pipex *cont)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (cont->cmds[i] != NULL)
+	{
+		while (cont->cmds[i][j] != NULL)
+		{
+			free(cont->cmds[i][j]);
+			j++;
+		}
+		free(cont->cmds[i]);
+		i++;
+		j = 0;
+	}
+	free(cont->cmds);
+	i = 0;
+	while (cont->paths[i] != 0)
+	{
+		free(cont->paths[i]);
+		i++;
+	}
+	free(cont->paths);
+	free(cont);
 }
