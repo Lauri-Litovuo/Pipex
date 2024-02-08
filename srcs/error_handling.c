@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:15:04 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/07 17:41:03 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/08 17:51:42 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@ void	error_handling(int errcode, char **paths)
 
 	i = 0;
 	if (errcode == 2)
-		perror ("Piping failed: ");
+		perror ("pipex: Piping failed: ");
 	if (errcode == 3)
-		perror ("Fork pid1 failed: ");
+		perror ("pipex: Fork pid1 failed: ");
 	if (errcode == 4)
-		perror ("Execve failed: ");
+		perror ("pipex: Execve failed: ");
 	if (errcode == 5)
-		perror ("Fork pid2 failed: ");
+		perror ("pipex: Fork pid2 failed: ");
 	if (errcode == 6)
-		perror ("Split failed: ");
+		perror ("pipex: Split failed: ");
 	if (errcode == 7)
-		perror ("Error in opening file: ");
+		perror ("pipex: Error in opening file: ");
 	if (errcode == 8)
-		perror ("Error in joining: ");
+		perror ("pipex: Error in joining: ");
 	if (paths != NULL)
 	{
 		while (paths[i] != NULL)
@@ -43,68 +43,18 @@ void	error_handling(int errcode, char **paths)
 	exit (1);
 }
 
-void	check_permissions(char **av)
+//these are checked to be right but there needs to be something to write these with.
+void	file_errors(char **av)
 {
 	if (access (av[1], F_OK))
-		perror ("Infile not found: ");
+	{
+		perror ("pipex: no such file or directory: ");
+		ft_putstr_fd(av[1], 2);
+		ft_putchar_fd("\n", 2);
+	}
 	if (access(av[1], R_OK) == -1)
-		perror ("Error in read permission: ");
+		perror ("pipex: permission denied: %s", av[1]);
 	if (access(av[4], R_OK) == -1 || access(av[4], W_OK) == -1)
-		perror ("Error in write permission: ");
+		perror ("pipex: permission denied: %s\n", av[4]);
 	exit(1);
-}
-
-void	errors_in_child(char **paths, char **cmds)
-{
-	
-}
-
-void	free_cmds(char ***cmds)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (cmds[i] != NULL)
-	{
-		while (cmds[i][j] != NULL)
-		{
-			free(cmds[i][j]);
-			j++;
-		}
-		free(cmds[i]);
-		i++;
-		j = 0;
-	}
-	free(cmds);
-}
-
-void	free_struct(t_pipex *cont)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (cont->cmds[i] != NULL)
-	{
-		while (cont->cmds[i][j] != NULL)
-		{
-			free(cont->cmds[i][j]);
-			j++;
-		}
-		free(cont->cmds[i]);
-		i++;
-		j = 0;
-	}
-	free(cont->cmds);
-	i = 0;
-	while (cont->paths[i] != 0)
-	{
-		free(cont->paths[i]);
-		i++;
-	}
-	free(cont->paths);
-	free(cont);
 }
