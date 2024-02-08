@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/07 18:10:58 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/08 17:36:09 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,27 @@ int	main(int ac, char **av, char **envp)
 {
 	t_pipex		*cont;
 
-	if (ac != 5) //change this to bonus < 5
+	if (ac != 5) //|| (ft_strnstr(av[1], "here_doc", 8) == 0 && ac < 6)) FOR BONUS
 	{
 		write (2, "Too few arguments.\n", 19);
 		return (-1);
 	}
-	cont = (t_pipex *) malloc (sizeof(cont));
+	cont = (t_pipex *) malloc (sizeof(*cont));
 	if (!cont)
 		exit(1);
 	init_cont(cont);
-	check_permissions(av); //check what shell does when ofile does not exist then move this if it creates
+	if ((ft_strnstr(av[1], "here_doc", ft_strlen(av[1])) != 0))
+		cont->here_doc = 1;
 	cont->fd_in = open(av[1], O_RDONLY);
 	cont->fd_out = open(av[4], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cont->fd_in == -1 || cont->fd_out == -1)
-		error_handling(7, NULL);
-	cont->paths = parse_path(envp);
+		file_errors(1, NULL);
+	cont->cmd_count = count_cmds(ac, av);
 	cont->cmds = get_cmds(av, cont->cmd_count);
+	cont->paths = get_paths(cont->cmds, cont->cmd_count, envp);
+	check_permissions(av); //check what shell does when ofile does not exist then move this if it creates
 	pipex(cont);
-	free_struct(&cont);
+	free_struct(cont);
 	return (0);
 }
 
@@ -71,17 +74,17 @@ static void	pipex(t_pipex *cont)
 	int		pid2;
 
 	if (pipe(fd) == -1)
-		error_handling(2, cont.paths);
+		error_handling(2, cont->paths);
 	pid1 = fork();
 	if (pid1 == -1)
-		error_handling(3, cont.paths);
+		error_handling(3, cont->paths);
 	if (pid1 == 0)
-		child1_proc(fd, cont.paths, av[2]);
+		child1_proc(fd, cont->paths, av[2]);
 	pid2 = fork();
 	if (pid2 == -1)
-		error_handling(2, cont.paths);
+		error_handling(2, cont->paths);
 	if (pid2 == 0)
-		child2_proc(fd, cont.paths, av[3]);
+		child2_proc(fd, cont->paths, av[3]);
 	if (close(fd[0]) == -1)
 		handle_pipex_error(smth); //here somethign that I will pass
 	if (close(fd[1]) == -1)
