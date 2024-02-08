@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:28:11 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/07 16:38:21 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:52:57 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,33 +37,8 @@ char	**parse_path(char **envp)
 	return (paths);
 }
 
-char	***get_cmds(char **av, int cmd_count)
-{
-	char	***cmds;
-	int		i;
-	int		j;
-	int		k;
 
-	i = 0;
-	j = 0;
-	cmds = (char ***) malloc((cmd_count + 1) * sizeof(char ***));
-	if (!cmds)
-		return (NULL);
-	while (i < cmd_count)
-	{
-		cmds[i] = ft_split(av[i + 2], ' ');
-		if (cmds[i] == NULL)
-		{
-			free_cmds(cmds); //rmbr to check this
-			return (0);
-		}
-		i++;
-	}
-	cmds[i] = NULL;
-	return (cmds);
-}
-
-char	*find_path(char **paths, char *cmd)
+char	*find_paths(t_pipex cont)
 {
 	int		i;
 	char	*full_path;
