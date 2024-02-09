@@ -45,6 +45,11 @@ int	main(int ac, char **av, char **envp)
 		printf("'%s' ", cont->paths[i]);
 		i++;
 	}
+	if (get_fds(cont, av) == -1)
+		return (1);
+	printf("\nfd_in: %d\nfd_out: %d\n", cont->fd_in, cont->fd_out);
+	close(cont->fd_in);
+	close(cont->fd_out);
 	free_struct(cont);
 	return (0);
 }
