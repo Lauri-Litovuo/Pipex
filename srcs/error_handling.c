@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:15:04 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/08 17:51:42 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:01:11 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,5 @@ void	error_handling(int errcode, char **paths)
 	exit (1);
 }
 
-//these are checked to be right but there needs to be something to write these with.
-void	file_errors(char **av)
-{
-	if (access (av[1], F_OK))
-	{
-		perror ("pipex: no such file or directory: ");
-		ft_putstr_fd(av[1], 2);
-		ft_putchar_fd("\n", 2);
-	}
-	if (access(av[1], R_OK) == -1)
-		perror ("pipex: permission denied: %s", av[1]);
-	if (access(av[4], R_OK) == -1 || access(av[4], W_OK) == -1)
-		perror ("pipex: permission denied: %s\n", av[4]);
-	exit(1);
-}
+//these are checked to be right but there needs to be something to write these with. 
+//Make sure the outfile is done even though av[1] fail
