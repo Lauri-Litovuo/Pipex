@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:28:11 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/08 12:52:57 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:23:02 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,6 @@ char	**parse_path(char **envp)
 	if (paths == NULL)
 		error_handling(6, paths);
 	return (paths);
-}
-
-
-char	*find_paths(t_pipex cont)
-{
-	int		i;
-	char	*full_path;
-
-	i = 0;
-	while (paths[i] != 0)
-	{
-		full_path = ft_strjoin("/", cmd);
-		full_path = ft_strjoin(paths[i], cmd);
-		if (access(full_path, F_OK) == 0)
-			return (paths[i]);
-		free(full_path);
-		i++;
-	}
-	return (NULL);
 }
 
 char	*join_str(char *path, char *cmd)

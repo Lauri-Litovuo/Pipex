@@ -6,20 +6,20 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/09 16:01:45 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:38:00 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/pipex.h"
 
 static void	init_cont(t_pipex *cont);
+int			handle_processes(t_pipex *cont);
 
 int	main(int ac, char **av, char **envp)
 {
 	t_pipex		*cont;
 	int			exitcode;
 
-	i = 0;
 	if (ac != 5) //|| (ft_strnstr(av[1], "here_doc", 8) == 0 && ac < 6)) FOR BONUS
 	{
 		write (2, "Too few arguments.\n", 19);
@@ -49,6 +49,40 @@ static void	init_cont(t_pipex *cont)
 	cont->cmds = NULL;
 	cont->cmd_count = 0;
 	cont->here_doc = 0; // for bonus
+}
+
+int	handle_processes(t_pipex *cont)
+{
+	pid_t	*pids;
+	int		exitcode;
+
+	pids = ft_calloc((cont->cmd_count + 1), sizeof(int));
+	if (pids == 0)
+		return (1);
+	if (piping(cont, &pids) == -1)
+	{
+		free (pids);
+		return (1);
+	}
+	exitcode = wait_children(pids);
+	free(pids);
+	return (exitcode);
+}
+
+int	wait_children(pid_t *pids)
+{
+	int	exitstatus;
+	int	i;
+	int	exitcode;
+
+	i = 0;
+	while (pids[i] != 0)
+	{
+		waitpid(pids, &exitstatus, 0);
+		i++;
+	}
+	exitcode = WEXITSTATUS(exitstatus);
+	return (exitcode);
 }
 
 
