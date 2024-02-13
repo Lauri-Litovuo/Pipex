@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:55:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/09 16:56:18 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/13 14:34:13 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,19 @@
  * @return int 
  */
 
-int	dup_and_exec(t_pipex *cont, int fd, int i)
+int	dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i)
 {
 	if (cont->cmds[i][0] == 0)
 		return (-1);
-	if (i < 1)
+	if (dup2(input_fd, STDIN_FILENO) == -1)
 	{
-		if (dup2(cont->fd_in, STDIN_FILENO) == -1)
-		{
-			return (-1);
-			perror("dup failed");
-		}
+		perror("dup failed");
+		return (-1);
 	}
-	else
+	if (dup2(output_fd, STDOUT_FILENO) == -1)
 	{
-		if (dup2(STDOUT_FILENO, cont->fd_out) == -1)
-		{
-			perror("dup failed");
-			return (-1);
-		}
+		perror("dup failed");
+		return (-1);
 	}
 	if (execve(cont->paths[i], cont->cmds[i][0], NULL) == -1)
 		perror("execve failed");
@@ -66,10 +60,8 @@ int	infile_pipe(t_pipex *cont, int *fd, int i)
 			perror("close failed");
 			return (-1);
 		}
-		dup_and_exec(cont, fd[1], i);
-		if (close(fd[1]) == -1)
-			perror("close failed");
-		return (-1);
+		if (dup_and_exec(cont, cont->fd_in, fd[1], i) == -1)
+			return (-1);
 	}
 	else
 	{
@@ -81,12 +73,59 @@ int	infile_pipe(t_pipex *cont, int *fd, int i)
 
 int	outfile_pipe(t_pipex *cont, int *fd, int i)
 {
-	
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror ("Fork failed");
+		return (-1);
+	}
+	if (pid == 0)
+	{
+		if (close(fd[1]) == -1)
+		{
+			perror("close failed");
+			return (-1);
+		}
+		if (dup_and_exec(cont, fd[0], cont->fd_out, i) == -1)
+			return (-1);
+	}
+	else
+	{
+		close(cont->fd_out);
+		close(fd[0]);
+	}
+	return (pid);
 }
 
 int	cmd_cmd_pipe(t_pipex *cont, int *fd, int i)
 {
-	
+	pid_t	pid;
+	int		fd2[2]; // fd[1], write ====== fd[0], read
+
+	if (pipe(fd2) < 0)
+	{
+		perror ("pipe failed");
+		return (-1);
+	}
+	pid = fork();
+	if (pid == -1)
+	{
+		perror ("fork failed");
+		return (-1);
+	}
+	if (pid == 0)
+	{
+		close (fd2[0]);
+		close (fd[1]);
+		dup_and_exec(cont, fd[0], fd2[1], i);
+	}
+	dup2 (fd2[0], fd[0]);
+	dup2 (fd2[1], fd[1]);
+	close (fd2[0]);
+	close (fd2[1]);
+	return (pid);
 }
 
 int	piping(t_pipex *cont, int **pids)
@@ -118,20 +157,3 @@ int	piping(t_pipex *cont, int **pids)
 	return (0);
 }
 
-int	handle_processes(t_pipex *cont)
-{
-	pid_t	*pids;
-	int		exitcode;
-
-	pids = ft_calloc((cont->cmd_count + 1), sizeof(int));
-	if (pids == 0)
-		return (1);
-	if (piping(cont, &pids) == -1)
-	{
-		free (pids);
-		return (1);
-	}
-	exitcode = wait_children(pids);
-	free(pids);
-	return (exitcode);
-}
