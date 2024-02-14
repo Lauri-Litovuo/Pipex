@@ -9,7 +9,7 @@ void	init_cont(t_pipex *cont)
 	cont->paths = NULL;
 	cont->cmds = NULL;
 	cont->cmd_count = 0;
-	cont->here_doc = 0; // for bonus
+	cont->here_doc = 0;
 }
 
 int	main(int ac, char **av, char **envp)
