@@ -21,7 +21,11 @@ LDFLAGS +=
 SRC = \
 		$Spipex.c \
 		$Spipex_utils.c \
-		$Serror_handling.c\
+		$Scmds_handling.c \
+		$Sfree_functions.c \
+		$Spaths_handling.c \
+		$Spiping.c \
+		
 
 
 
