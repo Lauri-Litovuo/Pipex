@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:28:11 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/14 15:27:22 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:25:48 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,18 @@ char	*join_str(char *path, char *cmd)
 int	get_fds(t_pipex *cont, char **av)
 {
 	cont->fd_in = open(av[1], O_RDONLY);
-	if (cont->fd_in == -1)
-	{
-		perror ("pipex");
-		free_struct(cont);
-		return (0);
-	}
 	cont->fd_out = open(av[cont->cmd_count + 2], \
 	O_RDWR | O_TRUNC | O_CREAT, 0644);
-	if (cont->fd_out == -1)
+	if (cont->fd_out == -1 || cont->fd_in == -1)
 	{
+		if (cont->fd_in == -1)
+		{
+			if (cont->fd_out != -1)
+				close(cont->fd_out);
+			perror (av[1]);
+			free_struct(cont);
+			return (0);
+		}
 		perror("pipex");
 		if (cont->fd_in != -1)
 			close(cont->fd_in);

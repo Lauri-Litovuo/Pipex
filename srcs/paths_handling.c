@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:53:38 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/09 10:42:33 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:36:40 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,6 @@ char	*find_path(char *cmd, char **env_paths)
 		free(full_path);
 		i++;
 	}
-	free(full_path);
-	return (free(temp), NULL);
+	free(temp);
+	return (NULL);
 }

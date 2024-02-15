@@ -6,23 +6,24 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/14 15:30:46 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:47:56 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/pipex.h"
 
+extern char		**environ;
 static void	init_cont(t_pipex *cont);
 int			handle_processes(t_pipex *cont);
 
-int	main(int ac, char **av, char **envp)
+int	main(int ac, char **av)
 {
-	t_pipex		*cont;
-	int			exitcode;
+	t_pipex			*cont;
+	int				exitcode;
 
 	if (ac != 5)
 	{
-		write (2, "Too few arguments.\n", 19);
+		write (2, "Argument count is not five.\n", 28);
 		return (1);
 	}
 	cont = (t_pipex *) malloc (sizeof(*cont));
@@ -31,10 +32,13 @@ int	main(int ac, char **av, char **envp)
 	init_cont(cont);
 	cont->cmd_count = count_cmds(ac);
 	cont->cmds = get_cmds(av, cont->cmd_count);
-	cont->paths = get_paths(cont->cmds, cont->cmd_count, envp);
-	exitcode = get_fds(cont, av);
+	cont->paths = get_paths(cont->cmds, cont->cmd_count, environ);
+	exitcode = get_fds(cont, av);//Check right place for this
 	if (exitcode == -1 || exitcode == 0)
-		exit (EXIT_FAILURE);
+	{
+		free_struct(cont);
+		return (exitcode);
+	}
 	exitcode = handle_processes(cont);
 	free_struct(cont);
 	return (exitcode);

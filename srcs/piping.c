@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:55:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/14 15:12:38 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:25:46 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,12 @@
 
 int	dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i)
 {
-	if (cont->cmds[i][0] == 0)
+	if (cont->paths[i][0] == 0)
+	{
+		ft_putstr_fd(cont->cmds[i][0], 2);
+		perror("command not found");
 		return (-1);
+	}
 	if (dup2(input_fd, STDIN_FILENO) == -1)
 	{
 		perror("input dup failed");
@@ -91,7 +95,6 @@ int	piping(t_pipex *cont, int **pids)
 	i = 0;
 	if (pipe(fd) == -1)
 	{
-		free(fd);
 		perror("pipe failed");
 		return (-1);
 	}
