@@ -9,7 +9,6 @@ void	init_cont(t_pipex *cont)
 	cont->paths = NULL;
 	cont->cmds = NULL;
 	cont->cmd_count = 0;
-	cont->here_doc = 0;
 }
 
 int	main(int ac, char **av, char **envp)
@@ -24,7 +23,7 @@ int	main(int ac, char **av, char **envp)
 	if (!cont)
 		exit(1);
 	init_cont(cont);
-	cont->cmd_count = count_cmds(ac, av);
+	cont->cmd_count = count_cmds(ac);
 	cont->cmds = get_cmds(av, cont->cmd_count);
 	printf("Command count is %d and commands are:\n", cont->cmd_count);
 	while (cont->cmds[i] != NULL)
