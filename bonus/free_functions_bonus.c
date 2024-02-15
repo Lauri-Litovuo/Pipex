@@ -6,12 +6,12 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:37 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/14 14:58:38 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:50:23 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../incl/pipex.h"
+#include "../incl/pipex_bonus.h"
 
 void	free_2d_arr(char **arr)
 {

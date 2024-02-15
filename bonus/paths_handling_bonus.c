@@ -6,11 +6,11 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:41 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/14 14:58:43 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:50:28 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl/pipex.h"
+#include "../incl/pipex_bonus.h"
 
 char	**parse_path(char **envp);
 char	*find_path(char *cmd, char **env_paths);
@@ -78,6 +78,6 @@ char	*find_path(char *cmd, char **env_paths)
 		free(full_path);
 		i++;
 	}
-	free(full_path);
-	return (free(temp), NULL);
+	free(temp);
+	return (NULL);
 }

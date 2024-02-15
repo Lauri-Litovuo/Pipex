@@ -6,11 +6,11 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:56 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/14 14:59:14 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:50:39 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl/pipex.h"
+#include "../incl/pipex_bonus.h"
 
 /**
  * @brief 

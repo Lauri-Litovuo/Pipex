@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "../libft/libft.h"
-#include "../incl/pipex.h"
+#include "../incl/pipex_bonus.h"
 
 void	init_cont(t_pipex *cont)
 {

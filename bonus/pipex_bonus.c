@@ -6,11 +6,11 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/14 14:58:48 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:50:05 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl/pipex.h"
+#include "../incl/pipex_bonus.h"
 
 static void	init_cont(t_pipex *cont);
 int			handle_processes(t_pipex *cont);
@@ -48,7 +48,7 @@ static void	init_cont(t_pipex *cont)
 	cont->paths = NULL;
 	cont->cmds = NULL;
 	cont->cmd_count = 0;
-	cont->here_doc = 0; // for bonus
+	cont->here_doc = 0;
 }
 
 int	handle_processes(t_pipex *cont)
