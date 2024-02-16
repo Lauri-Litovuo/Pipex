@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:28:11 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/15 13:55:12 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:55:32 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,40 @@ char	*join_str(char *path, char *cmd)
 	return (joint);
 }
 
-int	get_fds(t_pipex *cont, char **av)
+int	get_fdin(t_pipex *cont, char **av)
 {
 	cont->fd_in = open(av[1], O_RDONLY);
 	if (cont->fd_in == -1)
-		perror (av[1]);
-	cont->fd_out = open(av[cont->cmd_count + 2], \
-	O_RDWR | O_TRUNC | O_CREAT, 0644);
+	{
+		perror ("Fail in infile");
+		return (-1);
+	}
+	return (0);
+}
+
+int	get_fdout(t_pipex *cont, char **av)
+{
+	cont->fd_out = open(av[4], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cont->fd_out == -1)
 	{
 
-		perror(av[cont->cmd_count + 2]);
+		perror("fail in outfile");
 		if (cont->fd_in != -1)
 			close(cont->fd_in);
-		free_struct(cont);
 		return (-1);
 	}
-	return (1);
+	return (0);
+}
+
+void	write_error(char *name, char *errmsg)
+{
+	int	len;
+
+	write (2, "pipex: ", 7);
+	len = ft_strlen(name);
+	ft_putstr_fd(name, 2);
+	write(2, ": ", 2);
+	len = ft_strlen(errmsg);
+	ft_putstr_fd(errmsg, 2);
+	write (2, "\n", 1);
 }

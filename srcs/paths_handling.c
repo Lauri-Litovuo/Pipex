@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:53:38 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/15 13:36:40 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/16 17:00:54 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ char	**parse_path(char **envp)
 	int		len;
 
 	i = 0;
+	if (envp[i] == NULL)
+		return (NULL);
 	while (ft_strnstr(envp[i], "PATH", 5) == NULL)
 	{
 		i++;

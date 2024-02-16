@@ -6,17 +6,16 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/15 13:47:56 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:55:56 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/pipex.h"
 
-extern char		**environ;
 static void	init_cont(t_pipex *cont);
-int			handle_processes(t_pipex *cont);
+int			handle_processes(t_pipex *cont, char **av);
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **envp)
 {
 	t_pipex			*cont;
 	int				exitcode;
@@ -32,28 +31,22 @@ int	main(int ac, char **av)
 	init_cont(cont);
 	cont->cmd_count = count_cmds(ac);
 	cont->cmds = get_cmds(av, cont->cmd_count);
-	cont->paths = get_paths(cont->cmds, cont->cmd_count, environ);
-	exitcode = get_fds(cont, av);//Check right place for this
-	if (exitcode == -1 || exitcode == 0)
-	{
-		free_struct(cont);
-		return (exitcode);
-	}
-	exitcode = handle_processes(cont);
+	cont->paths = get_paths(cont->cmds, cont->cmd_count, envp);
+	exitcode = handle_processes(cont, av);
 	free_struct(cont);
 	return (exitcode);
 }
 
 static void	init_cont(t_pipex *cont)
 {
-	cont->fd_in = -1;
-	cont->fd_out = -1;
+	cont->fd_in = -7;
+	cont->fd_out = -5;
 	cont->paths = NULL;
 	cont->cmds = NULL;
 	cont->cmd_count = 0;
 }
 
-int	handle_processes(t_pipex *cont)
+int	handle_processes(t_pipex *cont, char **av)
 {
 	pid_t	*pids;
 	int		exitcode;
@@ -61,7 +54,7 @@ int	handle_processes(t_pipex *cont)
 	pids = ft_calloc((cont->cmd_count + 1), sizeof(int));
 	if (pids == 0)
 		return (1);
-	if (piping(cont, &pids) == -1)
+	if (piping(cont, &pids, av) == -1)
 	{
 		free (pids);
 		return (1);
