@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:42:16 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/14 15:10:59 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/16 13:33:37 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ char	*find_path(char *cmd, char **env_paths);
 int		count_cmds(int ac, char **av);
 char	***get_cmds(char **av, int cmd_count);
 
-int		get_fds(t_pipex *cont, char **av);
+int		get_fdin(t_pipex *cont, char **av);
+int		get_fdout(t_pipex *cont, char **av);
+void	write_error(char *name, char *errmsg);
 
 void	free_2d_arr(char **arr);
 void	free_3d_arr(char ***arr);
