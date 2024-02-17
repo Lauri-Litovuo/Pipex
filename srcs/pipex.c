@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/16 16:55:56 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/17 14:02:23 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	main(int ac, char **av, char **envp)
 	t_pipex			*cont;
 	int				exitcode;
 
+	exitcode = 0;
 	if (ac != 5)
 	{
 		write (2, "Argument count is not five.\n", 28);
@@ -51,13 +52,19 @@ int	handle_processes(t_pipex *cont, char **av)
 	pid_t	*pids;
 	int		exitcode;
 
+	exitcode = 0;
 	pids = ft_calloc((cont->cmd_count + 1), sizeof(int));
 	if (pids == 0)
 		return (1);
-	if (piping(cont, &pids, av) == -1)
+	if (piping(cont, &pids, av) != 0)
 	{
+		exitcode = wait_children(pids);
 		free (pids);
-		return (1);
+		if (access(av[4], X_OK == -1))
+		{
+			return (127);
+		}
+		return (exitcode);
 	}
 	exitcode = wait_children(pids);
 	free(pids);
