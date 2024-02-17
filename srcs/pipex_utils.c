@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:28:11 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/16 16:55:32 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/17 12:48:04 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	get_fdin(t_pipex *cont, char **av)
 	cont->fd_in = open(av[1], O_RDONLY);
 	if (cont->fd_in == -1)
 	{
-		perror ("Fail in infile");
+		perror (av[1]);
 		return (-1);
 	}
 	return (0);
@@ -47,7 +47,7 @@ int	get_fdout(t_pipex *cont, char **av)
 	if (cont->fd_out == -1)
 	{
 
-		perror("fail in outfile");
+		perror(av[4]);
 		if (cont->fd_in != -1)
 			close(cont->fd_in);
 		return (-1);
