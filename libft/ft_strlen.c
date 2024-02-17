@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 14:47:38 by llitovuo          #+#    #+#             */
-/*   Updated: 2023/11/10 16:07:47 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/17 14:18:37 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *a)
 	int	i;
 
 	i = 0;
+	if (!a[i])
+		return (i);
 	while (a[i] != '\0')
 	{
 		i++;
