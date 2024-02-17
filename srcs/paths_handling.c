@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:53:38 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/17 15:19:04 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/17 15:45:49 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	**get_paths(char ***cmds, int cmd_count, char **envp)
 	{
 		if (env_paths != NULL)
 		{
-			printf("hey\n");
 			paths[i] = find_path(cmds[i][0], env_paths);
 		}
 		else
