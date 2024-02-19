@@ -57,13 +57,9 @@ int	get_fdout(t_pipex *cont, char **av)
 
 void	write_error(char *name, char *errmsg)
 {
-	int	len;
-
 	write (2, "pipex: ", 7);
-	len = ft_strlen(name);
 	ft_putstr_fd(name, 2);
 	write(2, ": ", 2);
-	len = ft_strlen(errmsg);
 	ft_putstr_fd(errmsg, 2);
 	write (2, "\n", 1);
 }
