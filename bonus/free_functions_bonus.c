@@ -49,29 +49,11 @@ void	free_3d_arr(char ***arr)
 
 void	free_struct(t_pipex *cont)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (cont->cmds[i] != NULL)
-	{
-		while (cont->cmds[i][j] != NULL)
-		{
-			free(cont->cmds[i][j]);
-			j++;
-		}
-		free(cont->cmds[i]);
-		i++;
-		j = 0;
-	}
-	free(cont->cmds);
-	i = 0;
-	while (cont->paths[i] != NULL)
-	{
-		free(cont->paths[i]);
-		i++;
-	}
-	free(cont->paths);
-	free(cont);
+	free_3d_arr(cont->cmds);
+	free_2d_arr(cont->paths);
+	close(cont->fd_in);
+	close (cont->fd_out);
+	close (STDIN_FILENO);
+	free (cont);
+	exit (0);
 }

@@ -23,16 +23,20 @@ char	**get_paths(char ***cmds, int cmd_count, char **envp)
 
 	i = 0;
 	env_paths = parse_path(envp);
-	if (!env_paths)
-		return (NULL);
 	paths = (char **) malloc ((cmd_count + 1) * sizeof(char **));
 	while (i < cmd_count)
 	{
-		paths[i] = find_path(cmds[i][0], env_paths);
+		if (env_paths != NULL)
+		{
+			paths[i] = find_path(cmds[i][0], env_paths);
+		}
+		else
+			paths[i] = ft_strdup(cmds[i][0]);
 		i++;
 	}
 	paths[i] = 0;
-	free_2d_arr(env_paths);
+	if (env_paths != NULL)
+		free_2d_arr(env_paths);
 	return (paths);
 }
 
@@ -44,10 +48,12 @@ char	**parse_path(char **envp)
 	int		len;
 
 	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 5) == NULL)
+	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == NULL)
 	{
 		i++;
 	}
+	if (envp[i] == NULL)
+		return (NULL);
 	len = ft_strlen(envp[i]);
 	path_line = ft_substr(envp[i], 5, len);
 	if (path_line == NULL)
@@ -68,7 +74,7 @@ char	*find_path(char *cmd, char **env_paths)
 	temp = ft_strjoin("/", cmd);
 	if (!temp)
 		return (NULL);
-	while (env_paths[i] != 0)
+	while (env_paths[i])
 	{
 		full_path = ft_strjoin(env_paths[i], temp);
 		if (!full_path)
