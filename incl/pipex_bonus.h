@@ -49,11 +49,10 @@ int		dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i);
 int		infile_into_pipe(t_pipex *cont, int *fd, int i);
 int		pipe_into_outfile(t_pipex *cont, int *fd, int i);
 int		cmd_pipe_cmd(t_pipex *cont, int *fd_pre, int i);
-int		piping(t_pipex *cont, int **pids);
+int		piping(t_pipex *cont, int **pids, char **av);
 char	*join_str(char *path, char *cmd);
 
-int		handle_processes(t_pipex *cont);
-void	check_permissions(char **av);
+int		handle_processes(t_pipex *cont, char **av);
 int		wait_children(pid_t *pids);
 
 #endif
