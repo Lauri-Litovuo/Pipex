@@ -8,6 +8,7 @@ O = objs/
 I = incl/
 L = libft/
 B = bonus/
+BO = bonus_objs/
 
 all: $(NAME)
 
@@ -18,10 +19,10 @@ libft: $(LIBFT)
 .PHONY: all clean fclean re bonus
 
 CC = cc
-CFLAGS += -Wall -Wextra -Werror -I$I
+CFLAGS += -Wall -Wextra -Werror -I$I -I$L
 LDFLAGS += 
 
-#MANDATORY
+##		MANDATORY 	##
 
 SRC = \
 		$Spipex.c \
@@ -42,11 +43,11 @@ $(OBJ): | $O
 $O%.o: $S% $(LIBFT)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(LIBFT) $(OBJ)
+$(NAME): $(OBJ) $(LIBFT)
 	@$(CC) $(CFLAGS) $^ -o $@
 	@echo "Project ready for use."
 
-#BONUS
+##		BONUS		##
 
 SRC_B = \
 		$Bpipex_bonus.c \
@@ -56,11 +57,15 @@ SRC_B = \
 		$Bpaths_handling_bonus.c \
 		$Bpiping_bonus.c \
 
-OBJ_B = $(SRC_B:$B%=$O%.o)
+OBJ_B = $(SRC_B:$(BO)%=$O%.o)
 
-$(OBJ_B): | $O
+$(BO):
+	@mkdir -p $@
+	@echo "Making obj dir and files.."
 
-$O%bonus.c.o: $B% $(LIBFT)
+$(OBJ_B): | $(BO)
+
+$O%bonus.c.o: $(BO)% $(LIBFT)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(BNAME): $(LIBFT) $(OBJ_B)
@@ -94,10 +99,16 @@ cleanobj:
 cleanobjdir: cleanobj
 	@rm -rf $O
 
+cleanbonus:
+	@rm -f $(wildcard $(OBJ_B))
+
+cleanobjbdir: cleanbonus
+	@rm -rf $(BO)
+
 cleanlibft:
 	@make fclean -C $L
 
-clean: cleanobjdir cleanlibft
+clean: cleanobjdir cleanlibft cleanobjbdir
 	@echo "Cleaning object files and libft"
 
 fclean: clean
