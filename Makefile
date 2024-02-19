@@ -57,7 +57,7 @@ SRC_B = \
 		$Bpaths_handling_bonus.c \
 		$Bpiping_bonus.c \
 
-OBJ_B = $(SRC_B:$(BO)%=$O%.o)
+OBJ_B = $(SRC_B:$B%=$(BO)cd %.o)
 
 $(BO):
 	@mkdir -p $@
