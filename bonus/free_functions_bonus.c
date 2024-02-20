@@ -47,10 +47,21 @@ void	free_3d_arr(char ***arr)
 	free(arr);
 }
 
+void	free_paths(char **paths, int path_count)
+{
+	while (path_count > 0)
+	{
+		if (paths[path_count -1] != NULL)
+			free(paths[path_count - 1]);
+		path_count--;
+	}
+	free(paths);
+}
+
 void	free_struct(t_pipex *cont)
 {
 	free_3d_arr(cont->cmds);
-	free_2d_arr(cont->paths);
+	free_paths(cont->paths, cont->cmd_count);
 	close(cont->fd_in);
 	close (cont->fd_out);
 	close (STDIN_FILENO);
