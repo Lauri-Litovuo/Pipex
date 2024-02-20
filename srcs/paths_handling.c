@@ -35,8 +35,7 @@ char	**get_paths(char ***cmds, int cmd_count, char **envp)
 		i++;
 	}
 	paths[i] = 0;
-	if (env_paths != NULL)
-		free_2d_arr(env_paths);
+	free_2d_arr(env_paths);
 	return (paths);
 }
 
