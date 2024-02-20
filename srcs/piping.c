@@ -29,6 +29,8 @@ int	dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i)
 		perror("output dup failed");
 		return (-1);
 	}
+	close (input_fd);
+	close (output_fd);
 	execve(cont->paths[i], &cont->cmds[i][0], NULL);
 	perror(cont->cmds[i][0]);
 	return (-1);
@@ -47,6 +49,7 @@ int	infile_into_pipe(t_pipex *cont, int *fd, int i)
 	if (pid == 0)
 	{
 		close(fd[0]);
+		close (cont->fd_out);
 		if (cont->fd_in > 0)
 		{
 			if (dup_and_exec(cont, cont->fd_in, fd[1], i) == -1)
