@@ -42,6 +42,7 @@ void	write_error(char *name, char *errmsg);
 
 void	free_2d_arr(char **arr);
 void	free_3d_arr(char ***arr);
+void	free_paths(char **paths, int path_count);
 void	free_struct(t_pipex *cont);
 
 int		dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i);
