@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: lauri <lauri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/15 13:50:05 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/21 13:05:39 by lauri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int ac, char **av, char **envp)
 	t_pipex		*cont;
 	int			exitcode;
 
-	if (ac < 5 || (ft_strnstr(av[1], "here_doc", 8) == 0 && ac < 6)) 
+	if (ac < 5 || (ft_strnstr(av[1], "here_doc", 8) != 0 && ac < 6)) 
 	{
 		write (2, "Invalid arguments.\n", 19);
 		return (1);
