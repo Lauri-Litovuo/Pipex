@@ -57,7 +57,7 @@ SRC_B = \
 		$Bpaths_handling_bonus.c \
 		$Bpiping_bonus.c \
 
-OBJ_B = $(SRC_B:$B%=$(BO)cd %.o)
+OBJ_B = $(SRC_B:$B%=$(BO)%.o)
 
 $(BO):
 	@mkdir -p $@
@@ -65,12 +65,12 @@ $(BO):
 
 $(OBJ_B): | $(BO)
 
-$O%bonus.c.o: $(BO)% $(LIBFT)
+$(BO)%.o: $B% $(LIBFT)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(BNAME): $(LIBFT) $(OBJ_B)
+$(BNAME): $(OBJ_B) $(LIBFT)
 	@$(CC) $(CFLAGS) $^ -o $@
-	@echo "Project ready for use."
+	@echo "Bonus ready for use."
 
 #DEBUG
 
