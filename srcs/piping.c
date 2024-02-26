@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:55:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 10:54:52 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/26 12:03:27 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ int	infile_into_pipe(t_pipex *cont, int *fd, int i)
 		}
 		exit(EXIT_SUCCESS);
 	}
-	if (cont->fd_in > 0)
-		close(cont->fd_in);
+	close(cont->fd_in);
 	close(fd[1]);
 	return (pid);
 }
