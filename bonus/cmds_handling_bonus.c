@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds_handling_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lauri <lauri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:30 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/21 13:15:47 by lauri            ###   ########.fr       */
+/*   Updated: 2024/02/26 10:40:32 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	count_cmds(int ac, char **av)
 
 	i = 0;
 	count = 0;
-	if(ft_strnstr(av[1], "here_doc", 8) != 0)
+	if (ft_strnstr(av[1], "here_doc", 8) != 0)
 		i = 4;
 	else
 		i = 3;

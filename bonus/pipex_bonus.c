@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lauri <lauri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/21 13:05:39 by lauri            ###   ########.fr       */
+/*   Updated: 2024/02/26 10:42:56 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/pipex_bonus.h"
 
 static void	init_cont(t_pipex *cont);
-int	handle_processes(t_pipex *cont, char **av);
+int			handle_processes(t_pipex *cont, char **av);
 
 int	main(int ac, char **av, char **envp)
 {
 	t_pipex		*cont;
 	int			exitcode;
 
-	if (ac < 5 || (ft_strnstr(av[1], "here_doc", 8) != 0 && ac < 6)) 
+	if (ac < 5 || (ft_strnstr(av[1], "here_doc", 8) != 0 && ac < 6))
 	{
 		write (2, "Invalid arguments.\n", 19);
 		return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lauri <lauri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/21 13:56:17 by lauri            ###   ########.fr       */
+/*   Updated: 2024/02/26 11:28:13 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ void	write_error(char *name, char *errmsg)
 	write (2, "\n", 1);
 }
 
-void handle_heredoc(t_pipex *cont, char **av)
+void	handle_heredoc(t_pipex *cont, char **av)
 {
-	int	fd;
-	char *buffer;
+	int		fd;
+	char	*buffer;
 
 	fd = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
