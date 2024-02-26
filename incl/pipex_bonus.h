@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lauri <lauri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:42:16 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/21 12:51:46 by lauri            ###   ########.fr       */
+/*   Updated: 2024/02/26 11:51:34 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,6 @@ char	*join_str(char *path, char *cmd);
 int		handle_processes(t_pipex *cont, char **av);
 int		wait_children(pid_t *pids);
 
-void handle_heredoc(t_pipex *cont, char **av);
+void	handle_heredoc(t_pipex *cont, char **av);
 
 #endif
