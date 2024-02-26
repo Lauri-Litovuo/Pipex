@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 11:28:13 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/26 11:45:38 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,13 @@ int	get_fdin(t_pipex *cont, char **av)
 int	get_fdout(t_pipex *cont, char **av)
 {
 	if (cont->here_doc == 1)
-		cont->fd_out = open(av[cont->cmd_count + 3], O_RDWR | O_APPEND | O_CREAT, 0644);
+		cont->fd_out = open(av[cont->cmd_count + 3], \
+		O_RDWR | O_APPEND | O_CREAT, 0644);
 	else
-		cont->fd_out = open(av[cont->cmd_count + 2], O_RDWR | O_TRUNC | O_CREAT, 0644);
+		cont->fd_out = open(av[cont->cmd_count + 2], \
+		O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cont->fd_out == -1)
 	{
-
 		perror(av[4]);
 		if (cont->fd_in != -1)
 			close(cont->fd_in);
@@ -73,7 +74,6 @@ int	get_fdout(t_pipex *cont, char **av)
 
 void	write_error(char *name, char *errmsg)
 {
-
 	write (2, "pipex: ", 7);
 	ft_putstr_fd(name, 2);
 	write(2, ": ", 2);
@@ -107,4 +107,3 @@ void	handle_heredoc(t_pipex *cont, char **av)
 	if (cont->fd_in < 0)
 		unlink(".heredoc");
 }
-

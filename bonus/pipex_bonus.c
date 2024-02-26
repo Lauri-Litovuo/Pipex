@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 10:42:56 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/26 11:45:07 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,3 @@ int	wait_children(pid_t *pids)
 	exitcode = WEXITSTATUS(exitstatus);
 	return (exitcode);
 }
-
-
-
-
-
-
