@@ -72,7 +72,7 @@ $(BNAME): $(OBJ_B) $(LIBFT)
 	@$(CC) $(CFLAGS) $^ -o $@
 	@echo "Bonus ready for use."
 
-#DEBUG
+#DEBUG Check why this is not working properly!
 
 DEBUG_NAME = debug.out
 
@@ -80,8 +80,8 @@ debug: $(DEBUG_NAME)
 
 DEBUG_FLAGS = -g -fsanitize=address,undefined,integer
 
-$(DEBUG_NAME): $(LIBFT) $(OBJ)
-	@$(CC) $(DEBUG_FLAGS) $^ -o $@
+$(DEBUG_NAME): $(OBJ) $(LIBFT)
+	@$(CC) $(DEBUG_FLAGS) $(CFLAGS) $^ -o $@
 	@echo "Debug ready for use."
 
 cleandebug: fclean
