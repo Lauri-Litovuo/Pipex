@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:56 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 11:37:13 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/27 12:44:40 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,10 @@ int	cmd_pipe_cmd(t_pipex *cont, int *fd_pre, int i)
 	int		fd_npipe[2];
 
 	if (pipe(fd_npipe) < 0)
-	{
-		perror ("pipe failed");
-		return (-1);
-	}
+		return (perror ("pipe failed"), -1);
 	pid3 = fork();
 	if (pid3 == -1)
-	{
-		perror ("fork failed");
-		return (-1);
-	}
+		return (perror ("fork failed"), -1);
 	if (pid3 == 0)
 	{
 		close(fd_pre[1]);
