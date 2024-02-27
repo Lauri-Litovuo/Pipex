@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 14:30:11 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:32:52 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int ac, char **av, char **envp)
 	cont->cmds = get_cmds(av, cont->cmd_count);
 	cont->paths = get_paths(cont->cmds, cont->cmd_count, envp);
 	exitcode = handle_processes(cont, av);
+	printf("exitcode %d\n", exitcode);
 	free_struct(cont);
 	return (exitcode);
 }
@@ -45,6 +46,7 @@ static void	init_cont(t_pipex *cont)
 	cont->paths = NULL;
 	cont->cmds = NULL;
 	cont->cmd_count = 0;
+	cont->errcode = 0;
 }
 
 int	handle_processes(t_pipex *cont, char **av)
@@ -60,14 +62,15 @@ int	handle_processes(t_pipex *cont, char **av)
 	{
 		exitcode = wait_children(pids);
 		free (pids);
-		if (access(av[4], X_OK == -1))
-		{
-			return (127);
-		}
+		printf("errorcode %d\n", cont->errcode);
+		if (cont->errcode != 0)
+			exitcode = cont->errcode;
 		return (exitcode);
 	}
 	exitcode = wait_children(pids);
 	free(pids);
+	if (cont->errcode != 0)
+		exitcode = cont->errcode;
 	return (exitcode);
 }
 

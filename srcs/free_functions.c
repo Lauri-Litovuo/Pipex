@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:06:34 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 14:30:28 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:37:14 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,12 @@ void	free_struct(t_pipex *cont)
 {
 	free_3d_arr(cont->cmds);
 	free_paths(cont->paths, cont->cmd_count);
-	close(cont->fd_in);
-	close (cont->fd_out);
-	close (STDIN_FILENO);
+	if (cont->fd_in > 0)
+		close(cont->fd_in);
+	if (cont->fd_out > 0)
+		close (cont->fd_out);
 	free (cont);
-	exit (0);
+	printf("free error: %d\n", cont->errcode);
+	if (cont->errcode == 0)
+		exit (0);
 }

@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:55:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 12:03:27 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:38:17 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	infile_into_pipe(t_pipex *cont, int *fd, int i)
 	if (pid == -1)
 	{
 		perror ("Fork failed");
-		return (1);
+		return (-1);
 	}
 	if (pid == 0)
 	{
@@ -79,7 +79,7 @@ int	pipe_into_outfile(t_pipex *cont, int *fd, int i)
 	{
 		close (fd[1]);
 		if (dup_and_exec(cont, fd[0], cont->fd_out, i) == -1)
-			exit(EXIT_FAILURE);
+			exit(1);
 		exit (EXIT_SUCCESS);
 	}
 	close(cont->fd_out);
@@ -94,12 +94,9 @@ int	piping(t_pipex *cont, int **pids, char **av)
 
 	i = 0;
 	if (pipe(fd) == -1)
-	{
-		perror("pipe failed");
-		return (-1);
-	}
+		return (perror("pipe failed"), -1);
 	if (get_fdout(cont, av) != 0)
-		return (-1);
+		return (1);
 	if (get_fdin(cont, av) != -1)
 		(*pids)[i] = infile_into_pipe(cont, fd, i);
 	i++;
@@ -109,7 +106,10 @@ int	piping(t_pipex *cont, int **pids, char **av)
 	(*pids)[i] = 0;
 	close (fd[1]);
 	close (fd[0]);
-	if ((*pids)[i - 1] != 0 || (*pids)[i - 2] != 0)
+	i = 0;
+	if (cont->errcode != 0)
+	{
 		return (-1);
+	}
 	return (0);
 }
