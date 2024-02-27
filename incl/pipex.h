@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:42:16 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/16 14:18:11 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/27 13:01:41 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_pipex
 	char			**paths;
 	char			***cmds;
 	int				cmd_count;
+	int				errcode;
 }				t_pipex;
 
 char	**get_paths(char ***cmds, int cmd_count, char **envp);
