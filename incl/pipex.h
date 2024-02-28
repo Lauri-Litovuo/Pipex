@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:42:16 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/27 13:01:41 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 10:59:15 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,6 @@ char	*join_str(char *path, char *cmd);
 
 int		handle_processes(t_pipex *cont, char **av);
 void	check_permissions(char **av);
-int		wait_children(pid_t *pids);
+int		wait_children(pid_t *pids, t_pipex *cont);
 
 #endif

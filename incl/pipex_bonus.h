@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:42:16 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 11:51:34 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:15:18 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_pipex
 	char			***cmds;
 	int				cmd_count;
 	int				here_doc;
+	int				errcode;
 }				t_pipex;
 
 char	**get_paths(char ***cmds, int cmd_count, char **envp);
@@ -54,7 +55,7 @@ int		piping(t_pipex *cont, int **pids, char **av);
 char	*join_str(char *path, char *cmd);
 
 int		handle_processes(t_pipex *cont, char **av);
-int		wait_children(pid_t *pids);
+int		wait_children(pid_t *pids, t_pipex *cont);
 
 void	handle_heredoc(t_pipex *cont, char **av);
 
