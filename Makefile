@@ -1,5 +1,5 @@
 NAME = pipex
-BNAME = pipex_bonus
+BNAME = .pipex_b
 
 LIBFT = libft/libft.a
 
@@ -19,10 +19,12 @@ libft: $(LIBFT)
 .PHONY: all clean fclean re bonus
 
 CC = cc
-CFLAGS += -g -Wall -Wextra -Werror -I$I -I$L
+CFLAGS += -Wall -Wextra -Werror -I$I -I$L
 LDFLAGS += 
 
+######################
 ##		MANDATORY 	##
+######################
 
 SRC = \
 		$Spipex.c \
@@ -47,7 +49,9 @@ $(NAME): $(OBJ) $(LIBFT)
 	@$(CC) $(CFLAGS) $^ -o $@
 	@echo "Project ready for use."
 
+######################
 ##		BONUS		##
+######################
 
 SRC_B = \
 		$Bpipex_bonus.c \
@@ -59,7 +63,7 @@ SRC_B = \
 
 OBJ_B = $(SRC_B:$B%=$(BO)%.o)
 
-$(BO):
+ $(BO):
 	@mkdir -p $@
 	@echo "Making obj dir and files.."
 
@@ -70,9 +74,12 @@ $(BO)%.o: $B% $(LIBFT)
 
 $(BNAME): $(OBJ_B) $(LIBFT)
 	@$(CC) $(CFLAGS) $^ -o $@
+	@cp -f .pipex_b pipex 
 	@echo "Bonus ready for use."
 
-#DEBUG Check why this is not working properly!
+######################
+##		DEBUG		##
+######################
 
 DEBUG_NAME = debug.out
 
@@ -111,7 +118,7 @@ cleanlibft:
 clean: cleanobjdir cleanlibft cleanobjbdir
 	@echo "Cleaning object files and libft"
 
-fclean: clean
+fclean: clean cleanbonus
 	@rm -f $(NAME) $(BNAME)
 	@echo "Project file removed"
 
