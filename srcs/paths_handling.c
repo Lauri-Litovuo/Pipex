@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:53:38 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 14:28:53 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:07:00 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,11 @@ char	*find_path(char *cmd, char **env_paths)
 	char	*full_path;
 
 	i = 0;
+	if (access(cmd, F_OK) == 0)
+	{
+		full_path = ft_strdup(cmd);
+		return (full_path);
+	}
 	temp = ft_strjoin("/", cmd);
 	if (!temp)
 		return (NULL);
