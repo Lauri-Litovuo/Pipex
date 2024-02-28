@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 11:45:38 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:33:07 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	get_fdin(t_pipex *cont, char **av)
 		handle_heredoc(cont, av);
 		if (cont->fd_in < 0)
 		{
+			write (2, "pipex: ", 7);
 			perror("heredoc");
 			return (-1);
 		}
@@ -47,6 +48,7 @@ int	get_fdin(t_pipex *cont, char **av)
 		cont->fd_in = open(av[1], O_RDONLY);
 		if (cont->fd_in == -1)
 		{
+			write (2, "pipex: ", 7);
 			perror (av[1]);
 			return (-1);
 		}
@@ -64,7 +66,15 @@ int	get_fdout(t_pipex *cont, char **av)
 		O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cont->fd_out == -1)
 	{
-		perror(av[4]);
+		write (2, "pipex: ", 7);
+		if (cont->here_doc == 1)
+		{
+			perror(av[cont->cmd_count + 3]);
+		}
+		else
+		{
+			perror(av[cont->cmd_count + 2]);
+		}
 		if (cont->fd_in != -1)
 			close(cont->fd_in);
 		return (-1);

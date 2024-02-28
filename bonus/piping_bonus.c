@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:56 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/27 12:44:40 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:24:09 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,12 @@ int	dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i)
 {
 	if (cont->paths[i] == 0)
 	{
-		write_error(cont->cmds[i][0], "command not found");
+		if (ft_strnstr(cont->cmds[i][0], "/", 1) != NULL)
+			write_error(cont->cmds[i][0], "No such file or directory");
+		else if (ft_strnstr(cont->cmds[i][0], "./", 2) != NULL)
+			write_error(cont->cmds[i][0], "is a directory");
+		else
+			write_error(cont->cmds[i][0], "command not found");
 		return (-1);
 	}
 	if (dup2(input_fd, STDIN_FILENO) == -1)
@@ -32,7 +37,7 @@ int	dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i)
 	close (input_fd);
 	close (output_fd);
 	execve(cont->paths[i], &cont->cmds[i][0], NULL);
-	perror(cont->cmds[i][0]);
+	write_error(cont->cmds[i][0], "No such file or directory");
 	return (-1);
 }
 
@@ -44,7 +49,7 @@ int	infile_into_pipe(t_pipex *cont, int *fd, int i)
 	if (pid == -1)
 	{
 		perror ("Fork failed");
-		return (1);
+		return (-1);
 	}
 	if (pid == 0)
 	{
@@ -52,16 +57,16 @@ int	infile_into_pipe(t_pipex *cont, int *fd, int i)
 		close (cont->fd_out);
 		if (cont->fd_in > 0)
 		{
-			dup_and_exec(cont, cont->fd_in, fd[1], i);
-			close (fd[1]);
-			exit(EXIT_FAILURE);
+			if (dup_and_exec(cont, cont->fd_in, fd[1], i) == -1)
+			{
+				close (fd[1]);
+				exit(EXIT_FAILURE);
+			}
 		}
-		exit(EXIT_SUCCESS);
+		exit(0);
 	}
-	if (cont->fd_in > 0)
-		close(cont->fd_in);
+	close(cont->fd_in);
 	close(fd[1]);
-	wait(NULL);
 	return (pid);
 }
 
@@ -79,12 +84,11 @@ int	pipe_into_outfile(t_pipex *cont, int *fd, int i)
 	{
 		close (fd[1]);
 		if (dup_and_exec(cont, fd[0], cont->fd_out, i) == -1)
-			exit(EXIT_FAILURE);
+			exit(1);
 		exit (EXIT_SUCCESS);
 	}
 	close(cont->fd_out);
 	close(fd[0]);
-	wait(NULL);
 	return (pid2);
 }
 
