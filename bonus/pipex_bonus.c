@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/28 14:26:30 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:36:11 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	main(int ac, char **av, char **envp)
 	int				exitcode;
 
 	exitcode = 0;
-	if (ac != 5)
+	if (ac < 5 || (ft_strnstr(av[1], "here_doc", 8) != 0 && ac < 6))
 	{
-		write (2, "Argument count is not five.\n", 28);
+		write (2, "Invalid arguments.\n", 19);
 		return (1);
 	}
 	cont = (t_pipex *) malloc (sizeof(*cont));
