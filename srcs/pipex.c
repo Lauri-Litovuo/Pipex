@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/28 14:04:50 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 16:34:43 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void	init_cont(t_pipex *cont);
 int			handle_processes(t_pipex *cont, char **av);
+int			wait_children(pid_t *pids, t_pipex *cont);
 
 int	main(int ac, char **av, char **envp)
 {
