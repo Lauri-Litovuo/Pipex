@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/27 14:32:52 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:04:50 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	main(int ac, char **av, char **envp)
 	cont->cmds = get_cmds(av, cont->cmd_count);
 	cont->paths = get_paths(cont->cmds, cont->cmd_count, envp);
 	exitcode = handle_processes(cont, av);
-	printf("exitcode %d\n", exitcode);
 	free_struct(cont);
 	return (exitcode);
 }
@@ -60,21 +59,20 @@ int	handle_processes(t_pipex *cont, char **av)
 		return (1);
 	if (piping(cont, &pids, av) != 0)
 	{
-		exitcode = wait_children(pids);
+		exitcode = wait_children(pids, cont);
 		free (pids);
-		printf("errorcode %d\n", cont->errcode);
 		if (cont->errcode != 0)
 			exitcode = cont->errcode;
 		return (exitcode);
 	}
-	exitcode = wait_children(pids);
+	exitcode = wait_children(pids, cont);
 	free(pids);
 	if (cont->errcode != 0)
 		exitcode = cont->errcode;
 	return (exitcode);
 }
 
-int	wait_children(pid_t *pids)
+int	wait_children(pid_t *pids, t_pipex *cont)
 {
 	int	exitstatus;
 	int	i;
@@ -84,6 +82,15 @@ int	wait_children(pid_t *pids)
 	while (pids[i] != 0)
 	{
 		waitpid(pids[i], &exitstatus, 0);
+		if (exitstatus == 256 && pids[i] != 0 && \
+		ft_strnstr(cont->cmds[i][0], "./", 2) != NULL)
+			cont->errcode = 126;
+		else if (access(cont->paths[i], F_OK) == 0 && exitstatus == 256)
+			cont->errcode = 1;
+		else if (exitstatus == 256 && pids[i] != 0)
+			cont->errcode = 127;
+		else
+			cont->errcode = WEXITSTATUS(exitstatus);
 		i++;
 	}
 	exitcode = WEXITSTATUS(exitstatus);

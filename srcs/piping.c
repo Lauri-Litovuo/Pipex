@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:55:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/27 14:38:17 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:14:36 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,12 @@ int	dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i)
 {
 	if (cont->paths[i] == 0)
 	{
-		write_error(cont->cmds[i][0], "command not found");
+		if (ft_strnstr(cont->cmds[i][0], "/", 1) != NULL)
+			write_error(cont->cmds[i][0], "No such file or directory");
+		else if (ft_strnstr(cont->cmds[i][0], "./", 2) != NULL)
+			write_error(cont->cmds[i][0], "is a directory");
+		else
+			write_error(cont->cmds[i][0], "command not found");
 		return (-1);
 	}
 	if (dup2(input_fd, STDIN_FILENO) == -1)
@@ -32,7 +37,7 @@ int	dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i)
 	close (input_fd);
 	close (output_fd);
 	execve(cont->paths[i], &cont->cmds[i][0], NULL);
-	perror(cont->cmds[i][0]);
+	write_error(cont->cmds[i][0], "No such file or directory");
 	return (-1);
 }
 
@@ -58,7 +63,7 @@ int	infile_into_pipe(t_pipex *cont, int *fd, int i)
 				exit(EXIT_FAILURE);
 			}
 		}
-		exit(EXIT_SUCCESS);
+		exit(0);
 	}
 	close(cont->fd_in);
 	close(fd[1]);
@@ -108,8 +113,6 @@ int	piping(t_pipex *cont, int **pids, char **av)
 	close (fd[0]);
 	i = 0;
 	if (cont->errcode != 0)
-	{
 		return (-1);
-	}
 	return (0);
 }
