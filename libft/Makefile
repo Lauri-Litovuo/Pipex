@@ -58,7 +58,7 @@ HEADERS = libft.h
 
 CC: cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror
 
 $(NAME): $(OBJECTS)
 	@ar -rsc $(NAME) $(OBJECTS)
