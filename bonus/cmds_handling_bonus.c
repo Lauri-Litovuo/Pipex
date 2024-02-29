@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:30 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/29 11:34:01 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/29 13:19:03 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	***get_cmds(char **av, int cmd_count)
 		return (NULL);
 	while (i < cmd_count)
 	{
-		cmds[i] = ft_split(av[i + j], ' '); //check when there is only delimiters
+		cmds[i] = ft_split(av[i + j], ' ');
 		if (cmds[i] == NULL)
 		{
 			return (0);
