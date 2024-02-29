@@ -19,7 +19,7 @@ libft: $(LIBFT)
 .PHONY: all clean fclean re bonus
 
 CC = cc
-CFLAGS += -Wall -Wextra -Werror -I$I -I$L
+CFLAGS += -g -Wall -Wextra -Werror -I$I -I$L
 LDFLAGS += 
 
 ######################
