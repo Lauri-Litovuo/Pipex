@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:37 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/28 14:25:23 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/29 10:54:11 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	free_struct(t_pipex *cont)
 	free_paths(cont->paths, cont->cmd_count);
 	if (cont->fd_in > 0)
 		close(cont->fd_in);
+	if (cont->here_doc == 1)
+		unlink(".heredoc");
 	if (cont->fd_out > 0)
 		close (cont->fd_out);
 	free (cont);

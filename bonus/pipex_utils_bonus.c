@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/28 14:33:07 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/29 10:58:58 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,12 @@ void	handle_heredoc(t_pipex *cont, char **av)
 	while (1)
 	{
 		ft_printf("heredoc> ");
-		buffer = get_next_line(fd);
+		buffer = get_next_line(0);
 		if (buffer == NULL)
 			exit (EXIT_FAILURE);
-		if (ft_strncmp(av[3], buffer, ft_strlen(buffer) == 0))
+		if (ft_strncmp(av[2], buffer, ft_strlen(buffer) - 1) == 0)
 			break ;
 		ft_putstr_fd(buffer, fd);
-		ft_putchar_fd('\n', fd);
 		free(buffer);
 	}
 	free(buffer);

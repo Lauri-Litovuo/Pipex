@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/28 16:46:57 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/29 10:58:34 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	main(int ac, char **av, char **envp)
 	int				exitcode;
 
 	exitcode = 0;
-	if (ac < 5 || (ft_strnstr(av[1], "here_doc", ft_strlen(av[1]) != 0 && ac < 6))) //check that only heredoc is allowed nothing else
+	if (ac < 5 || \
+	(ft_strncmp(av[1], "here_doc", ft_strlen(av[1]) == 0 && ac < 6)))
 	{
 		write (2, "Invalid arguments.\n", 19);
 		return (1);
@@ -31,7 +32,7 @@ int	main(int ac, char **av, char **envp)
 	if (!cont)
 		exit (EXIT_FAILURE);
 	init_cont(cont);
-	if (ft_strnstr(av[1], "here_doc", ft_strlen(av[1])) != 0)
+	if (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) == 0)
 		cont->here_doc = 1;
 	cont->cmd_count = count_cmds(ac, av);
 	cont->cmds = get_cmds(av, cont->cmd_count);

@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:30 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/26 11:44:03 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/29 09:46:21 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	count_cmds(int ac, char **av)
 
 	i = 0;
 	count = 0;
-	if (ft_strnstr(av[1], "here_doc", 8) != 0)
+	if (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) == 0)
 		i = 4;
 	else
 		i = 3;
@@ -35,7 +35,7 @@ char	***get_cmds(char **av, int cmd_count)
 
 	i = 0;
 	j = 2;
-	if (ft_strnstr(av[1], "here_doc", 8) != 0)
+	if (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) == 0)
 		j = 3;
 	cmds = (char ***) malloc((cmd_count + 1) * sizeof(char ***));
 	if (!cmds)
