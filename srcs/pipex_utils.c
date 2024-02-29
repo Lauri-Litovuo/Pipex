@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:28:11 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/27 13:49:18 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/02/29 11:12:44 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	get_fdin(t_pipex *cont, char **av)
 	cont->fd_in = open(av[1], O_RDONLY);
 	if (cont->fd_in == -1)
 	{
+		write(2, "pipex: ", 7);
 		perror (av[1]);
 		return (-1);
 	}
