@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/03/01 10:42:50 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:40:15 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,16 @@ int	handle_processes(t_pipex *cont, char **av)
 	pids = ft_calloc((cont->cmd_count + 1), sizeof(int));
 	if (pids == 0)
 		return (1);
-	if (piping(cont, &pids, av) != 0)
-	{
-		exitcode = wait_children(pids, cont);
-		free (pids);
-		if (cont->errcode != 0)
-			exitcode = cont->errcode;
-		return (exitcode);
-	}
+	piping(cont, &pids, av);
 	exitcode = wait_children(pids, cont);
 	free(pids);
 	if (cont->errcode != 0)
 		exitcode = cont->errcode;
+	if (access(av[4], W_OK) != 0)
+	{
+		cont->errcode = 1;
+		exitcode = 1;
+	}
 	return (exitcode);
 }
 
