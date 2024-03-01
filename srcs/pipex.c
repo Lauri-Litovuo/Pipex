@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/29 14:47:02 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/03/01 10:41:52 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,13 @@ int	wait_children(pid_t *pids, t_pipex *cont)
 	int	exitcode;
 
 	i = 0;
-	while (pids[i] != 0) // check this segfaults!
+	exitcode = 0;
+	exitstatus = 0;
+	while (pids[i] != 0)
 	{
 		waitpid(pids[i], &exitstatus, 0);
 		if (exitstatus == 256 && pids[i] != 0 && \
-		ft_strnstr(cont->cmds[i][0], "./", 2) != NULL)
+		cont->cmds[i][0] && ft_strncmp(cont->cmds[i][0], "./", 2) == 0)
 			cont->errcode = 126;
 		else if (access(cont->paths[i], F_OK) == 0 && exitstatus == 256)
 			cont->errcode = 1;
