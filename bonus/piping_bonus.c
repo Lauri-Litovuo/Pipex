@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:56 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/29 14:10:59 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/03/01 12:15:42 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	cmd_pipe_cmd(t_pipex *cont, int *fd_pre, int i)
 		return (-1);
 	dup2(fd_npipe[0], fd_pre[0]);
 	dup2(fd_npipe[1], fd_pre[1]);
-	wait(NULL);
+	close (fd_pre[1]);
 	return (pid3);
 }
 

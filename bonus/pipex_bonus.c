@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:46 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/29 13:13:17 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/03/01 10:42:50 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	wait_children(pid_t *pids, t_pipex *cont)
 	{
 		waitpid(pids[i], &exitstatus, 0);
 		if (exitstatus == 256 && pids[i] != 0 && \
-		ft_strnstr(cont->cmds[i][0], "./", 2) != NULL)
+		cont->cmds[i][0] && ft_strnstr(cont->cmds[i][0], "./", 2) != NULL)
 			cont->errcode = 126;
 		else if (access(cont->paths[i], F_OK) == 0 && exitstatus == 256)
 			cont->errcode = 1;
