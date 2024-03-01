@@ -6,11 +6,18 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:41:47 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/03/01 16:38:29 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:26:09 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/pipex.h"
+
+////When wc is not allowed should give errors.
+
+// Bonus:
+
+// Check what takes so long, 
+// error handling is not right!
 
 static void	init_cont(t_pipex *cont);
 int			handle_processes(t_pipex *cont, char **av);
