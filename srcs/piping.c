@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:55:51 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/29 13:02:28 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:20:20 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,7 @@ int	piping(t_pipex *cont, int **pids, char **av)
 	i = 0;
 	if (pipe(fd) == -1)
 		return (perror("pipe failed"), -1);
-	if (get_fdout(cont, av) != 0)
-		return (1);
+	get_fdout(cont, av);
 	if (get_fdin(cont, av) != -1)
 		(*pids)[i] = infile_into_pipe(cont, fd, i);
 	i++;
@@ -111,7 +110,6 @@ int	piping(t_pipex *cont, int **pids, char **av)
 	(*pids)[i] = 0;
 	close (fd[1]);
 	close (fd[0]);
-	i = 0;
 	if (cont->errcode != 0)
 		return (-1);
 	return (0);

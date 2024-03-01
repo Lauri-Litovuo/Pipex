@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:28:11 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/02/29 11:12:44 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:44:45 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int	get_fdout(t_pipex *cont, char **av)
 	if (cont->fd_out == -1)
 	{
 		write_error(av[4], "Permission denied");
-		if (cont->fd_in != -1)
-			close (cont->fd_in);
-		cont->errcode = 1;
+		 if (cont->fd_in > 0)
+		 	close (cont->fd_in);
+		cont->errcode = -1;
 		return (-1);
 	}
 	return (0);
