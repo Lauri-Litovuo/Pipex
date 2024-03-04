@@ -6,7 +6,7 @@
 /*   By: llitovuo <llitovuo@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:58:56 by llitovuo          #+#    #+#             */
-/*   Updated: 2024/03/01 17:21:36 by llitovuo         ###   ########.fr       */
+/*   Updated: 2024/03/04 10:26:59 by llitovuo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ int	dup_and_exec(t_pipex *cont, int input_fd, int output_fd, int i)
 	}
 	if (dup2(input_fd, STDIN_FILENO) == -1)
 	{
-		perror("input dup failed");
+		perror("Dup failed");
 		return (-1);
 	}
 	if (dup2(output_fd, STDOUT_FILENO) == -1)
 	{
-		perror("output dup failed");
+		perror("Dup failed");
 		return (-1);
 	}
 	close (input_fd);
 	close (output_fd);
-	execve(cont->paths[i], &cont->cmds[i][0], NULL);
-	write_error(cont->cmds[i][0], "No such file or directory");
+	if (execve(cont->paths[i], &cont->cmds[i][0], NULL) == -1)
+		perror (cont->cmds[i][0]);
 	return (-1);
 }
 
@@ -48,7 +48,7 @@ int	infile_into_pipe(t_pipex *cont, int *fd, int i)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror ("Fork failed");
+		perror ("Failed to fork");
 		return (-1);
 	}
 	if (pid == 0)
@@ -77,7 +77,7 @@ int	pipe_into_outfile(t_pipex *cont, int *fd, int i)
 	pid2 = fork();
 	if (pid2 == -1)
 	{
-		perror ("Fork failed");
+		perror ("Failed to fork");
 		return (-1);
 	}
 	if (pid2 == 0)
@@ -98,10 +98,10 @@ int	cmd_pipe_cmd(t_pipex *cont, int *fd_pre, int i)
 	int		fd_npipe[2];
 
 	if (pipe(fd_npipe) < 0)
-		return (perror ("pipe failed"), -1);
+		return (perror ("Failed to pipe"), -1);
 	pid3 = fork();
 	if (pid3 == -1)
-		return (perror ("fork failed"), -1);
+		return (perror ("Failed to fork"), -1);
 	if (pid3 == 0)
 	{
 		close(fd_pre[1]);
@@ -124,7 +124,7 @@ int	piping(t_pipex *cont, int **pids, char **av)
 
 	i = 0;
 	if (pipe(fd) == -1)
-		return (perror("pipe failed"), -1);
+		return (perror("Failed to pipe"), -1);
 	if (get_fdout(cont, av) != 0)
 		return (-1);
 	if (get_fdin(cont, av) != -1)
